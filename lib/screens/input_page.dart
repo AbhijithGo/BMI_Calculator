@@ -7,7 +7,7 @@ import '../constants.dart';
 import 'results_page.dart';
 import '../components/round_icon_button.dart';
 import '../components/bottom_button.dart';
-
+import 'package:bmi_calc/calculator_brain.dart';
 
 enum Gender {
   male,
@@ -105,19 +105,19 @@ class _InputPageState extends State<InputPage> {
                     ),
                     SliderTheme(
                       data: SliderTheme.of(context).copyWith(
-                          activeTrackColor: Colors.white,
-                          inactiveTrackColor: Color(0xFF8D8E98),
-                          thumbColor: Color(0xFFEB1555),
-                          overlayColor: Color(0x29EB1555),
-                          thumbShape:
-                              RoundSliderThumbShape(enabledThumbRadius: 15.0),
-                          overlayShape:
-                              RoundSliderOverlayShape(overlayRadius: 30)),
+                        inactiveTrackColor: Color(0xFF8D8E98),
+                        activeTrackColor: Colors.blueAccent,
+                        thumbColor: Color(0xFF4f98ca),
+                        overlayColor: Color(0x2966cccc),
+                        thumbShape:
+                        RoundSliderThumbShape(enabledThumbRadius: 15.0),
+                        overlayShape:
+                        RoundSliderOverlayShape(overlayRadius: 30.0),
+                      ),
                       child: Slider(
                         value: height.toDouble(),
-                        min: 120,
-                        max: 220,
-                        activeColor: Color(0xFFEB1555),
+                        min: 120.0,
+                        max: 220.0,
                         onChanged: (double newValue) {
                           setState(() {
                             height = newValue.round();
@@ -222,12 +222,23 @@ class _InputPageState extends State<InputPage> {
             BottomButton(
               buttonTitle: "CALCULATE",
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Results()));
+                CalculatorBrain calc = CalculatorBrain(
+                  height: height, weight: weight
+                );
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Results(
+                      bmiResult: calc.calculateBmi(),
+                      resultText: calc.getResult(),
+                      interpretataion: calc.getInterpretation(),
+                    ),
+                  ),
+                );
               },
             )
           ],
         ));
   }
 }
-
